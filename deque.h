@@ -454,11 +454,16 @@ namespace lab8GE
         {
             clear( );
         }
+        // first entry of the data block
         else if (back_ptr == *last_bp)
         {
             // STUDENT WORK...
+            delete[] *last_bp;
+            --last_bp;
+            back_ptr = *(last_bp + BLOCK_SIZE);
 
         }
+        // move pointer
         else
         {
             --back_ptr;
