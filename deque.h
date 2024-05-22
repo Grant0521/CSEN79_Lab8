@@ -186,7 +186,7 @@ namespace lab8GE
         first_bp = last_bp = NULL;
         front_ptr = back_ptr = NULL;
     }
-    
+
     
     //COPY CONSTRUCTOR
     template <class Item>
@@ -219,9 +219,7 @@ namespace lab8GE
         block_size = source.block_size;
         
         // Create a new array of block pointers
-        // STUDENT WORK...
-
-        
+        block_pointers = new value_type* [bp_array_size];
         
         // Copy the data blocks of "source" object
         for (size_type bp_array_index = 0; bp_array_index < source.bp_array_size; ++bp_array_index)
@@ -259,13 +257,14 @@ namespace lab8GE
     template <class Item>
     deque<Item>::~deque () {
         
-        // Clear the data blocks
-        // STUDENT WORK...
-        
+        delete block_pointers_end;
+        delete first_bp;
+        delete last_bp;
+        delete front_ptr;
+        delete back_ptr;
         
         // Clear the array of block pointers
-        // STUDENT WORK...
-        
+        delete[] block_pointers;
         
         first_bp = last_bp = block_pointers_end = block_pointers = NULL;
         front_ptr = back_ptr = NULL;
