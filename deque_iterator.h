@@ -1,3 +1,9 @@
+/*
+ * Name: Grant Johnson, Ethan Sychangco
+ * Email: Gmjohnson@scu.edu, Esychangco@scu.edu
+ */
+
+
 // FILE: deque_iterator.h
 // PROVIDES: A class for deque iterator (non-const)
 //

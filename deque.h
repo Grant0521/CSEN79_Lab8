@@ -1,3 +1,9 @@
+/*
+ * Name: Grant Johnson, Ethan Sychangco
+ * Email: Gmjohnson@scu.edu, Esychangco@scu.edu
+ */
+
+
 // FILE: deque.h
 // PROVIDES: A class for deque (double ended queue)
 // Belongs to namespace lab8GE
