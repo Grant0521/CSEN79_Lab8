@@ -1,3 +1,9 @@
+/*
+ * Name: Grant Johnson, Ethan Sychangco
+ * Email: Gmjohnson@scu.edu, Esychangco@scu.edu
+ */
+
+
 // FILE: deque_iterator.h
 // PROVIDES: A class for deque iterator (non-const)
 //
@@ -93,13 +99,20 @@ namespace lab8GE
             if (cursor == current_boundary)
             {
                 // STUDENT WORK...
-
+                // move current block pointer to next
+                current_block_pointer = (current_block_pointer + 1);
+                // move cursor to where that block pointer is poining
+                cursor = *(current_block_pointer);
+                // adjust current boundary
+                current_boundary = *(current_block_pointer + lab8GE::deque.BLOCK_SIZE);
+                return *this;
             }
             // Move forward
             else
             {
                 // STUDENT WORK...
-
+                cursor = (cursor + 1);
+                return *this
             }
             
             return *this;
@@ -128,13 +141,22 @@ namespace lab8GE
             if (cursor == current_boundary)
             {
                 // STUDENT WORK...
+                // move current block pointer to next
+                current_block_pointer = (current_block_pointer + 1);
+                // move cursor to where that block pointer is poining
+                cursor = *(current_block_pointer);
+                // adjust current boundary
+                current_boundary = *(current_block_pointer + lab8GE::deque.BLOCK_SIZE);
+                return *this;
+
 
             }
             // Move forward
             else
             {
                 // STUDENT WORK...
-
+                cursor = (cursor + 1);
+                return *this
             }
             
             return original;
