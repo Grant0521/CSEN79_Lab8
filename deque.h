@@ -1,6 +1,6 @@
 // FILE: deque.h
 // PROVIDES: A class for deque (double ended queue)
-// Belongs to namespace coen79_lab8
+// Belongs to namespace lab8GE
 //
 //
 // TEMPLATE PARAMETER, TYPEDEFS and MEMBER CONSTANTS for the deque<Item> class:
@@ -102,7 +102,7 @@
 #include "deque_iterator.h" // The iterator class for deque (refer to file deque_iterator.h)
 
 
-namespace coen79_lab8
+namespace lab8GE
 {
     template <class Item>
     class deque {

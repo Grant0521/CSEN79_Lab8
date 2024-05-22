@@ -8,7 +8,7 @@
 #include <iostream>
 #include "deque.h"
 
-using namespace coen79_lab8;
+using namespace lab8GE;
 
 int main(int argc, const char * argv[]) {
     
@@ -17,7 +17,7 @@ int main(int argc, const char * argv[]) {
     // ------------- Test: constructor -------------
     std::cout << "Test number: " << ++test_number << "\n";
     std::cout << "Testing constructor...!\n";
-    coen79_lab8::deque<int> myDeque1;
+    lab8GE::deque<int> myDeque1;
     std::cout << "Done!\n\n";
     
     
@@ -87,7 +87,7 @@ int main(int argc, const char * argv[]) {
     // ------------- Test: assignment operator -------------
     std::cout << "Test number: " << ++test_number << "\n";
     std::cout << "Testing assignment operator...!\n";
-    coen79_lab8::deque<int> myDeque2;
+    lab8GE::deque<int> myDeque2;
     myDeque2.push_front(3);
     myDeque2.push_front(2);
     myDeque2.push_front(1);
@@ -95,7 +95,7 @@ int main(int argc, const char * argv[]) {
     myDeque2.push_back(5);
     myDeque2.push_back(6);
     
-    coen79_lab8::deque<int> myDeque3;
+    lab8GE::deque<int> myDeque3;
     myDeque3 = myDeque2;
     
     for (deque<int>::iterator it = myDeque3.begin(); it != myDeque3.end(); ++it)
@@ -108,7 +108,7 @@ int main(int argc, const char * argv[]) {
     // ------------- Test: copy constructor-------------
     std::cout << "Test number: " << ++test_number << "\n";
     std::cout << "Testing copy constructor...!\n";
-    coen79_lab8::deque<int> myDeque4(myDeque3);
+    lab8GE::deque<int> myDeque4(myDeque3);
 
     for (deque<int>::iterator it = myDeque4.begin(); it != myDeque4.end(); ++it)
         std::cout << *it << " ";

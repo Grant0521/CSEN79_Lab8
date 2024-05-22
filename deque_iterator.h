@@ -16,7 +16,7 @@
 
 #include "deque.h"
 
-namespace coen79_lab8
+namespace lab8GE
 {
     template <class Item>
     class deque_iterator : public std::iterator<std::forward_iterator_tag, Item>
@@ -68,7 +68,7 @@ namespace coen79_lab8
         bool operator ==(const deque_iterator other) const
         {
             // STUDENT WORK...
-            
+            return !(this!=other);
         }
         
         
