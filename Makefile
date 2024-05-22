@@ -1,2 +1,2 @@
 all:
-	g++ -o <name> deque_test.cpp
+	g++ -o *.h deque_test.cpp
