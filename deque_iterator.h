@@ -84,7 +84,6 @@ namespace lab8GE
             // Set the variables. Return the iterator.
             if (cursor == back_ptr)
             {
-                std::cout << "BACK ";    
                 cursor = NULL;
                 current_boundary = NULL;
                 current_block_pointer = NULL;
@@ -92,12 +91,8 @@ namespace lab8GE
             }
 
             // Move to the next data block
-            std::cout << "[cursor: " << cursor << " ";
-            std::cout << "current boundary: " << current_boundary << "]" << std::endl;
             if (cursor == current_boundary)
             {
-                std::cout << "JUMP ";
-                
                 current_block_pointer = (current_block_pointer + 1);
                 cursor = *current_block_pointer;
                 current_boundary = *(current_block_pointer) + block_size - 1;
@@ -106,7 +101,6 @@ namespace lab8GE
             // Move forward
             else
             {
-                //std::cout << "GO ";
                 ++cursor;
                 return *this;
             }
@@ -123,7 +117,6 @@ namespace lab8GE
             // There is no item after the current item. Set the variables. Return the iterator.
             if (cursor == back_ptr)
             {
-                std::cout << "BACK ";    
                 cursor = NULL;
                 current_boundary = NULL;
                 current_block_pointer = NULL;
@@ -131,11 +124,8 @@ namespace lab8GE
             }
 
             // Move to the next data block
-            //std::cout << "[cursor: " << cursor << " ";
-            //std::cout << "currenct boundary: " << current_boundary << "]" << std::endl;
             if (cursor == current_boundary)
             {
-                std::cout << "JUMP ";
                 current_block_pointer = (current_block_pointer + 1);
                 cursor = *current_block_pointer;
                 current_boundary = *(current_block_pointer) + block_size - 1;
@@ -145,7 +135,6 @@ namespace lab8GE
             // Move forward
             else
             {
-                //std::cout << "GO ";
                 cursor++;
                 return original;
             }

@@ -270,6 +270,7 @@ namespace lab8GE
         
         bp_array_size = 0;
         block_size = 0;
+        delete[] block_pointers;
     }
     
     
@@ -303,15 +304,11 @@ namespace lab8GE
         if (block_pointers == NULL)
             return;
         
-        for (value_type** p = block_pointers; p != block_pointers_end + 1; ++p) {
-            
-            // "p" points to an entry in the array of block pointers
-            // "*p" is the address of a data block
-            
-            // If the entry is not NULL
-            if (*p != NULL) {
-                delete [] *p;
-                *p = NULL;
+        // Index based approach
+        for (int i = 0; i < bp_array_size; i++){
+            if (block_pointers[i] != NULL) {
+                delete [] block_pointers[i];
+                block_pointers[i] = NULL;
             }
         }
         
@@ -322,29 +319,39 @@ namespace lab8GE
     // RESERVE FUNCTION
     template <class Item>
     void deque<Item>::reserve () {
+        // The new array of block pointers includes 20 more entries
+        // This results in increasing the size by 20 x BLOCK_SIZE
+        size_type newSize = bp_array_size + 20;
         
-        size_type old_size = bp_array_size;
-        size_type new_size = old_size + 20;
+        // Create a new array of block pointers
+        value_type** new_block_pointers = new value_type* [newSize];
         
-        value_type** new_block_pointers = new value_type* [new_size];
-        
-        value_type** p1 = block_pointers;
-        value_type** p2 = new_block_pointers;
-        
-        while (p1 != (block_pointers_end + 1))
+        // Assign NULL to all the entries of the array of block pointers
+        for (size_type index = 0; index < newSize; ++index)
         {
-            *p2++ = *p1++;
+            new_block_pointers[index] = NULL;
         }
         
+        // Find the location of "first_bp" in the new array of block pointers
+        // The offset enables us to copy the not-NULL elements of the existing
+        // array to the middle of the new array
+        size_type offsett_first_bp = first_bp - block_pointers;
+        size_type offsett_last_bp = last_bp - block_pointers;
+        
+        // Copy the not-NULL elements of the array of block pointers to the new array,
+        // starting at the computer offset
+        std::copy(first_bp, last_bp + 1, new_block_pointers + 10 + offsett_first_bp);
+        
+        
+        // Delete the existing array of block pointers
         delete [] block_pointers;
         
+        // Set the pointers
         block_pointers = new_block_pointers;
-        bp_array_size = new_size;
-        
-        block_pointers_end = block_pointers + (bp_array_size - 1);
-        
-        first_bp = block_pointers;
-        last_bp = block_pointers + (old_size - 1);
+        bp_array_size = newSize;
+        block_pointers_end = block_pointers + bp_array_size - 1;
+        first_bp = block_pointers + offsett_first_bp + 10;
+        last_bp = block_pointers + offsett_last_bp + 10;
     }
     
     
@@ -383,57 +390,12 @@ namespace lab8GE
         --front_ptr;
         *front_ptr = entry;
 
-        std::cout << first_bp;
-        std::cout << *first_bp;
     }
     
     
     // PUSH_BACK FUNCTION
     template <class Item>
     void deque<Item>::push_back (const value_type& entry) {
-
-        /*
-        // Only the array of block pointers exists (and no data block exists)
-        if (last_bp == NULL)
-        {
-            assert(bp_array_size > 1);
-            size_t bp_mid = floor(bp_array_size/2); // Get the mid point of the array of block pointers
-            
-            last_bp = first_bp = block_pointers + bp_mid  - 1;
-
-            *first_bp = new value_type[block_size]
-            front_ptr = back_ptr = *first_bp + block_size / 2;
-            *back_ptr = entry;
-            return;
-
-        }
-        
-        // There is at least one empty slot after the entry
-        // that back_ptr points to (in the same data block)
-        else if (back_ptr != ((*last_bp) + (block_size - 1)))
-        {
-            // STUDENT WORK...
-
-        }
-        
-        // Data block has no room left after back_ptr;
-        // however, the array of block pointers has at least one available slot
-        // below last_bp to allocate a new data block
-        else if ((back_ptr == ((*last_bp) + (block_size - 1))) && (last_bp != block_pointers_end))
-        {
-            // STUDENT WORK...
-
-        }
-        
-        // Data block has no room left after back_ptr;
-        // and the array of block pointers has no available slot after last_bp
-        else if ((back_ptr == ((*last_bp) + (block_size - 1))) && (last_bp == block_pointers_end))
-        {
-            // STUDENT WORK...
-
-        }
-
-        */
         
         if (isEmpty())
         {
@@ -464,7 +426,8 @@ namespace lab8GE
         }
         
         ++back_ptr;
-        *back_ptr = entry;        
+        *back_ptr = entry;       
+ 
     }
     
     
@@ -531,10 +494,6 @@ namespace lab8GE
             tmp_cursor = front_ptr;
             tmp_current_block_pointer = first_bp;
             tmp_current_boundary = (*first_bp) + (block_size - 1);
-            std::cout << first_bp << std::endl;
-            std::cout << *first_bp << std::endl;
-            std::cout << front_ptr << std::endl;
-            std::cout << tmp_current_boundary << std::endl;
         }
         return iterator(block_pointers, block_pointers_end, first_bp, last_bp,
             front_ptr, back_ptr,
