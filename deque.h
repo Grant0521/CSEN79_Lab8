@@ -356,7 +356,7 @@ namespace lab8GE
         {
             first_bp = last_bp = block_pointers + (bp_array_size / 2);
             *first_bp = new value_type [block_size];
-            front_ptr = back_ptr = *first_bp + (block_size / 2);
+            front_ptr = back_ptr = *first_bp;
             *front_ptr = entry;
             return;
         }
@@ -382,18 +382,64 @@ namespace lab8GE
         
         --front_ptr;
         *front_ptr = entry;
+
+        std::cout << first_bp;
+        std::cout << *first_bp;
     }
     
     
     // PUSH_BACK FUNCTION
     template <class Item>
     void deque<Item>::push_back (const value_type& entry) {
+
+        /*
+        // Only the array of block pointers exists (and no data block exists)
+        if (last_bp == NULL)
+        {
+            assert(bp_array_size > 1);
+            size_t bp_mid = floor(bp_array_size/2); // Get the mid point of the array of block pointers
+            
+            last_bp = first_bp = block_pointers + bp_mid  - 1;
+
+            *first_bp = new value_type[block_size]
+            front_ptr = back_ptr = *first_bp + block_size / 2;
+            *back_ptr = entry;
+            return;
+
+        }
+        
+        // There is at least one empty slot after the entry
+        // that back_ptr points to (in the same data block)
+        else if (back_ptr != ((*last_bp) + (block_size - 1)))
+        {
+            // STUDENT WORK...
+
+        }
+        
+        // Data block has no room left after back_ptr;
+        // however, the array of block pointers has at least one available slot
+        // below last_bp to allocate a new data block
+        else if ((back_ptr == ((*last_bp) + (block_size - 1))) && (last_bp != block_pointers_end))
+        {
+            // STUDENT WORK...
+
+        }
+        
+        // Data block has no room left after back_ptr;
+        // and the array of block pointers has no available slot after last_bp
+        else if ((back_ptr == ((*last_bp) + (block_size - 1))) && (last_bp == block_pointers_end))
+        {
+            // STUDENT WORK...
+
+        }
+
+        */
         
         if (isEmpty())
         {
             first_bp = last_bp = block_pointers + (bp_array_size / 2);
             *first_bp = new value_type [block_size];
-            front_ptr = back_ptr = *first_bp + (block_size / 2);
+            front_ptr = back_ptr = *first_bp;
             *back_ptr = entry;
             return;
         }
@@ -418,7 +464,7 @@ namespace lab8GE
         }
         
         ++back_ptr;
-        *back_ptr = entry;
+        *back_ptr = entry;        
     }
     
     
@@ -485,6 +531,10 @@ namespace lab8GE
             tmp_cursor = front_ptr;
             tmp_current_block_pointer = first_bp;
             tmp_current_boundary = (*first_bp) + (block_size - 1);
+            std::cout << first_bp << std::endl;
+            std::cout << *first_bp << std::endl;
+            std::cout << front_ptr << std::endl;
+            std::cout << tmp_current_boundary << std::endl;
         }
             return iterator(block_pointers, block_pointers_end, first_bp, last_bp,
             front_ptr, back_ptr,
