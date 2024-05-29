@@ -486,13 +486,12 @@ namespace lab8GE
             tmp_current_block_pointer = first_bp;
             tmp_current_boundary = (*first_bp) + (block_size - 1);
         }
-        return iterator(block_pointers, block_pointers_end, first_bp, last_bp,
+            return iterator(block_pointers, block_pointers_end, first_bp, last_bp,
             front_ptr, back_ptr,
             bp_array_size, block_size,
             tmp_cursor, tmp_current_boundary,
             tmp_current_block_pointer);
     }
-
     // Constructs an itertor which points to the past the
     // last element of the deque
     template <class Item>
@@ -501,6 +500,7 @@ namespace lab8GE
         value_type* tmp_cursor = NULL;
         value_type* tmp_current_boundary = NULL;
         value_type** tmp_current_block_pointer = NULL;
+        
         return iterator(block_pointers, block_pointers_end, first_bp, last_bp,
         front_ptr, back_ptr,
         bp_array_size, block_size,
