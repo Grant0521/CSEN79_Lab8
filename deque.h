@@ -232,21 +232,30 @@ namespace lab8GE
             else
             {
                 //If this is the first_bp of source, then set the first_bp of this deque
-                // STUDENT WORK...
+                if (source.first_bp == source.block_pointers + bp_array_index) {
+                    first_bp = block_pointers + bp_array_index;
+                }
                 
-                
-                //If this is the back_ptr of source, then set the back_ptr of this deque
-                // STUDENT WORK...
-                
+                //If this is the last_bp of source, then set the last_bp of this deque
+                if (source.last_bp == source.block_pointers + bp_array_index) {
+                    last_bp = block_pointers + bp_array_index;
+                }
                 
                 // Create a data block
                 block_pointers[bp_array_index] = new value_type [block_size];
                 
-                
                 // Copy the elements, and set "front_ptr" and "back_ptr" if appropriate
                 for (size_type block_item_index = 0; block_item_index < block_size; ++block_item_index)
                 {
-                    // STUDENT WORK...
+                    block_pointers[bp_array_index][block_item_index] = source.block_pointers[bp_array_index][block_item_index];
+                    
+                    if (source.front_ptr == source.block_pointers[bp_array_index] + block_item_index) {
+                        front_ptr = block_pointers[bp_array_index] + block_item_index;
+                    }
+                    
+                    if (source.back_ptr == source.block_pointers[bp_array_index] + block_item_index) {
+                        back_ptr = block_pointers[bp_array_index] + block_item_index;
+                    }
                 }
             }
         }
@@ -256,229 +265,210 @@ namespace lab8GE
     //DESTRUCTOR
     template <class Item>
     deque<Item>::~deque () {
+        // Invoke the clear() function to delete all the entries of the deque
+        clear();
         
-        delete block_pointers_end;
-        delete first_bp;
-        delete last_bp;
-        delete front_ptr;
-        delete back_ptr;
-        
-        // Clear the array of block pointers
-        delete[] block_pointers;
-        
-        first_bp = last_bp = block_pointers_end = block_pointers = NULL;
-        front_ptr = back_ptr = NULL;
+        bp_array_size = 0;
+        block_size = 0;
     }
     
     
+    // isEmpty FUNCTION
     template <class Item>
-    void deque<Item>::clear () {
-        
-        // Clear the data blocks
-        // STUDENT WORK...
-        
-        
-        first_bp = last_bp = NULL;
-        front_ptr = back_ptr = NULL;
-        
-        // Note: The array of block pointers should not be deleted;
-        //       However, all of its entries are NULL because all the
-        //       data blocks have been deleted.
+    bool deque<Item>::isEmpty () {
+        return (front_ptr == NULL);
     }
     
     
-    
+    // FRONT FUNCTION
     template <class Item>
-    void deque<Item>::reserve()
-    {
-        // The new array of block pointers includes 20 more entries
-        // This results in increasing the size by 20 x BLOCK_SIZE
-        size_type newSize = bp_array_size + 20;
-        
-        // Create a new array of block pointers
-        value_type** new_block_pointers = new value_type* [newSize];
-        
-        // Assign NULL to all the entries of the array of block pointers
-        for (size_type index = 0; index < newSize; ++index)
-        {
-            new_block_pointers[index] = NULL;
-        }
-        
-        // Find the location of "first_bp" in the new array of block pointers
-        // The offset enables us to copy the not-NULL elements of the existing
-        // array to the middle of the new array
-        size_type offsett_first_bp = first_bp - block_pointers;
-        size_type offsett_last_bp = last_bp - block_pointers;
-        
-        
-        // Copy the not-NULL elements of the array of block pointers to the new array,
-        // starting at the computer offset
-        std::copy(first_bp, last_bp + 1, new_block_pointers + 10 + offsett_first_bp);
-        
-        
-        // Delete the existing array of block pointers
-        delete [] block_pointers;
-        
-        // Set the pointers
-        block_pointers = new_block_pointers;
-        bp_array_size = newSize;
-        block_pointers_end = block_pointers + bp_array_size - 1;
-        first_bp = block_pointers + offsett_first_bp + 10;
-        last_bp = block_pointers + offsett_last_bp + 10;
+    typename deque<Item>::value_type deque<Item>::front () {
+        assert(front_ptr != NULL);
+        return *front_ptr;
     }
     
     
+    // BACK FUNCTION
     template <class Item>
-    void deque<Item>::push_front(const value_type& entry)
-    {
-        // Only the array of block pointers exists (and no data block exists)
-        if (first_bp == NULL)
-        {
-            assert(bp_array_size > 1);
-            size_t bp_mid = floor(bp_array_size/2); // Get the mid point of the array of block pointers
-            
-            // Both last_bp and first_bp point to
-            // the same location of the array of block pointers
-            last_bp = first_bp = block_pointers + bp_mid - 1;
-            
-            // STUDENT WORK...
-        }
-        
-        // There is at least one empty slot before the entry that
-        // front_ptr points to (in the same data block)
-        else if (front_ptr != *first_bp)
-        {
-            // STUDENT WORK...
-        }
-        
-        // Data block has no room left before front_ptr; however,
-        // the array of block pointers has at least one available
-        // slot before first_bp to allocate a new data block
-        else if ((*first_bp == front_ptr) && (first_bp != block_pointers))
-        {
-            // STUDENT WORK...
-
-        }
-        
-        // Data block has no room left before front_ptr;
-        // and the array of block pointers has no available slot before first_bp
-        else if ((*first_bp == front_ptr) && (first_bp == block_pointers))
-        {
-            // STUDENT WORK...
-
-        }
-    }
-    
-    
-    template <class Item>
-    void deque<Item>::push_back(const value_type& entry)
-    {
-        // Only the array of block pointers exists (and no data block exists)
-        if (last_bp == NULL)
-        {
-            assert(bp_array_size > 1);
-            size_t bp_mid = floor(bp_array_size/2); // Get the mid point of the array of block pointers
-            
-            last_bp = first_bp = block_pointers + bp_mid  - 1;
-
-            // STUDENT WORK...
-
-        }
-        
-        // There is at least one empty slot after the entry
-        // that back_ptr points to (in the same data block)
-        else if (back_ptr != ((*last_bp) + (block_size - 1)))
-        {
-            // STUDENT WORK...
-
-        }
-        
-        // Data block has no room left after back_ptr;
-        // however, the array of block pointers has at least one available slot
-        // below last_bp to allocate a new data block
-        else if ((back_ptr == ((*last_bp) + (block_size - 1))) && (last_bp != block_pointers_end))
-        {
-            // STUDENT WORK...
-
-        }
-        
-        // Data block has no room left after back_ptr;
-        // and the array of block pointers has no available slot after last_bp
-        else if ((back_ptr == ((*last_bp) + (block_size - 1))) && (last_bp == block_pointers_end))
-        {
-            // STUDENT WORK...
-
-        }
-    }
-    
-    
-    template <class Item>
-    void deque<Item>::pop_front()
-    {
-        assert(!isEmpty());
-        
-        // This is the only entry in the deque; remove it and delete the data block
-        if (back_ptr == front_ptr)
-        {
-            // STUDENT WORK...
-
-        }
-        // This is the last entry of the data block; move to the next block
-        else if (front_ptr == ((*first_bp) + block_size - 1))
-        {
-            // STUDENT WORK...
-
-        }
-        // Simply move the pointer
-        else
-        {
-            // STUDENT WORK...
-
-        }
-    }
-    
-    
-    template <class Item>
-    void deque<Item>::pop_back()
-    {
-        assert(!isEmpty());
-        
-        if (back_ptr == front_ptr)
-        {
-            clear( );
-        }
-        else if (back_ptr == *last_bp)
-        {
-            // STUDENT WORK...
-
-        }
-        else
-        {
-            --back_ptr;
-        }
-    }
-    
-    template <class Item>
-    bool deque<Item>::isEmpty()
-    {
-        if (front_ptr == NULL)
-            return true;
-        
-        return false;
-    }
-    
-    template <class Item>
-    typename deque<Item>::value_type deque<Item>::back()
-    {
-        assert(!isEmpty());
+    typename deque<Item>::value_type deque<Item>::back () {
+        assert(back_ptr != NULL);
         return *back_ptr;
     }
     
+    
+    // CLEAR FUNCTION
     template <class Item>
-    typename deque<Item>::value_type deque<Item>::front()
-    {
+    void deque<Item>::clear () {
+        
+        if (block_pointers == NULL)
+            return;
+        
+        for (value_type** p = block_pointers; p != block_pointers_end + 1; ++p) {
+            
+            // "p" points to an entry in the array of block pointers
+            // "*p" is the address of a data block
+            
+            // If the entry is not NULL
+            if (*p != NULL) {
+                delete [] *p;
+                *p = NULL;
+            }
+        }
+        
+        first_bp = last_bp = NULL;
+        front_ptr = back_ptr = NULL;
+    }
+    
+    // RESERVE FUNCTION
+    template <class Item>
+    void deque<Item>::reserve () {
+        
+        size_type old_size = bp_array_size;
+        size_type new_size = old_size + 20;
+        
+        value_type** new_block_pointers = new value_type* [new_size];
+        
+        value_type** p1 = block_pointers;
+        value_type** p2 = new_block_pointers;
+        
+        while (p1 != (block_pointers_end + 1))
+        {
+            *p2++ = *p1++;
+        }
+        
+        delete [] block_pointers;
+        
+        block_pointers = new_block_pointers;
+        bp_array_size = new_size;
+        
+        block_pointers_end = block_pointers + (bp_array_size - 1);
+        
+        first_bp = block_pointers;
+        last_bp = block_pointers + (old_size - 1);
+    }
+    
+    
+    // PUSH_FRONT FUNCTION
+    template <class Item>
+    void deque<Item>::push_front (const value_type& entry) {
+        
+        if (isEmpty())
+        {
+            first_bp = last_bp = block_pointers + (bp_array_size / 2);
+            *first_bp = new value_type [block_size];
+            front_ptr = back_ptr = *first_bp + (block_size / 2);
+            *front_ptr = entry;
+            return;
+        }
+        
+        if (front_ptr == *first_bp)
+        {
+            if (first_bp == block_pointers)
+            {
+                reserve();
+            }
+            
+            --first_bp;
+            
+            if (*first_bp == NULL)
+            {
+                *first_bp = new value_type [block_size];
+            }
+            
+            front_ptr = *first_bp + (block_size - 1);
+            *front_ptr = entry;
+            return;
+        }
+        
+        --front_ptr;
+        *front_ptr = entry;
+    }
+    
+    
+    // PUSH_BACK FUNCTION
+    template <class Item>
+    void deque<Item>::push_back (const value_type& entry) {
+        
+        if (isEmpty())
+        {
+            first_bp = last_bp = block_pointers + (bp_array_size / 2);
+            *first_bp = new value_type [block_size];
+            front_ptr = back_ptr = *first_bp + (block_size / 2);
+            *back_ptr = entry;
+            return;
+        }
+        
+        if (back_ptr == (*last_bp + block_size - 1))
+        {
+            if (last_bp == block_pointers_end)
+            {
+                reserve();
+            }
+            
+            ++last_bp;
+            
+            if (*last_bp == NULL)
+            {
+                *last_bp = new value_type [block_size];
+            }
+            
+            back_ptr = *last_bp;
+            *back_ptr = entry;
+            return;
+        }
+        
+        ++back_ptr;
+        *back_ptr = entry;
+    }
+    
+    
+    // POP_FRONT FUNCTION
+    template <class Item>
+    void deque<Item>::pop_front () {
+        
         assert(!isEmpty());
-        return *front_ptr;
+        
+        if (front_ptr == back_ptr)
+        {
+            *first_bp = NULL;
+            front_ptr = back_ptr = NULL;
+            return;
+        }
+        
+        if (front_ptr == (*first_bp + block_size - 1))
+        {
+            *first_bp = NULL;
+            ++first_bp;
+            front_ptr = *first_bp;
+            return;
+        }
+        
+        ++front_ptr;
+    }
+    
+    
+    // POP_BACK FUNCTION
+    template <class Item>
+    void deque<Item>::pop_back () {
+        
+        assert(!isEmpty());
+        
+        if (front_ptr == back_ptr)
+        {
+            *last_bp = NULL;
+            front_ptr = back_ptr = NULL;
+            return;
+        }
+        
+        if (back_ptr == *last_bp)
+        {
+            *last_bp = NULL;
+            --last_bp;
+            back_ptr = *last_bp + (block_size - 1);
+            return;
+        }
+        
+        --back_ptr;
     }
     
     
@@ -490,21 +480,19 @@ namespace lab8GE
         value_type* tmp_cursor = NULL;
         value_type* tmp_current_boundary = NULL;
         value_type** tmp_current_block_pointer = NULL;
-        
         if (front_ptr != NULL)
         {
             tmp_cursor = front_ptr;
             tmp_current_block_pointer = first_bp;
             tmp_current_boundary = (*first_bp) + (block_size - 1);
         }
-        
         return iterator(block_pointers, block_pointers_end, first_bp, last_bp,
-                        front_ptr, back_ptr,
-                        bp_array_size, block_size,
-                        tmp_cursor, tmp_current_boundary, tmp_current_block_pointer);
+            front_ptr, back_ptr,
+            bp_array_size, block_size,
+            tmp_cursor, tmp_current_boundary,
+            tmp_current_block_pointer);
     }
-    
-    
+
     // Constructs an itertor which points to the past the
     // last element of the deque
     template <class Item>
@@ -513,13 +501,12 @@ namespace lab8GE
         value_type* tmp_cursor = NULL;
         value_type* tmp_current_boundary = NULL;
         value_type** tmp_current_block_pointer = NULL;
-        
         return iterator(block_pointers, block_pointers_end, first_bp, last_bp,
-                        front_ptr, back_ptr,
-                        bp_array_size, block_size,
-                        tmp_cursor, tmp_current_boundary, tmp_current_block_pointer);
+        front_ptr, back_ptr,
+        bp_array_size, block_size,
+        tmp_cursor, tmp_current_boundary,
+        tmp_current_block_pointer);
     }
-    
 }
 
-#endif /* deque_hpp */
+#endif

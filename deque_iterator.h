@@ -27,12 +27,12 @@ namespace lab8GE
     template <class Item>
     class deque_iterator : public std::iterator<std::forward_iterator_tag, Item>
     {
-        
     public:
+        static const size_t BLOCK_SIZE = 5;
         typedef std::size_t size_type;
         typedef Item value_type;
-        
-        // CONSTRUCTOR
+
+        // Constructor
         deque_iterator(value_type** initial_block_pointers = NULL, value_type**  initial_block_pointers_end = NULL,
                        value_type**  initial_first_bp = NULL, value_type**  initial_last_bp = NULL,
                        value_type* initial_front_ptr = NULL, value_type* initial_back_ptr = NULL,
@@ -56,37 +56,30 @@ namespace lab8GE
             current_block_pointer = initial_current_block_pointer;
             current_boundary = initial_current_boundary;
         }
-        
-        // CONST MEMBER FUNCTIONS
+
+        // Const member functions
         value_type& operator *( ) const
         { return *cursor; }
-        
-        
+
         bool operator !=(const deque_iterator other) const
         { return (block_pointers != other.block_pointers || block_pointers_end != other.block_pointers_end
                   || first_bp != other.first_bp  || last_bp != other.last_bp
                   || front_ptr != other.front_ptr  || back_ptr != other.back_ptr
                   || bp_array_size != other.bp_array_size  || block_size != other.block_size
                   || cursor != other.cursor  || current_boundary != other.current_boundary  || current_block_pointer != other.current_block_pointer ); }
-        
-        
-        
+
         bool operator ==(const deque_iterator other) const
-        {
-            // STUDENT WORK...
-            return !(this!=other);
-        }
-        
-        
-        // MODIFICATION MEMBER FUNCTIONS
+        { return !(*this != other); }
+
+        // Modify the member functions to access BLOCK_SIZE directly
         deque_iterator& operator ++( ) // Prefix ++
         {
             // The cursor cannot move forward, simply return the iterator
             if (cursor == NULL)
                 return *this;
-            
+
             // There is no item after the current item.
-            // Set the variables. Return the itertor.
+            // Set the variables. Return the iterator.
             if (cursor == back_ptr)
             {
                 cursor = NULL;
@@ -94,41 +87,32 @@ namespace lab8GE
                 current_block_pointer = NULL;
                 return *this;
             }
-            
+
             // Move to the next data block
             if (cursor == current_boundary)
             {
-                // STUDENT WORK...
-                // move current block pointer to next
                 current_block_pointer = (current_block_pointer + 1);
-                // move cursor to where that block pointer is poining
-                cursor = *(current_block_pointer);
-                // adjust current boundary
-                current_boundary = *(current_block_pointer + lab8GE::deque.BLOCK_SIZE);
+                cursor = *current_block_pointer;
+                current_boundary = *(current_block_pointer + BLOCK_SIZE);
                 return *this;
             }
             // Move forward
             else
             {
-                // STUDENT WORK...
-                cursor = (cursor + 1);
-                return *this
+                ++cursor;
+                return *this;
             }
-            
-            return *this;
         }
-        
-        
+
         deque_iterator operator ++(int) // Postfix ++
         {
-            deque_iterator original;
-            original = *this;
-            
+            deque_iterator original = *this;
+
             // The cursor cannot move forward, simply return the iterator
             if (cursor == NULL)
                 return original;
-            
-            // There is no item after the current item. Set the variables. Return the itertor.
+
+            // There is no item after the current item. Set the variables. Return the iterator.
             if (cursor == back_ptr)
             {
                 cursor = NULL;
@@ -136,62 +120,49 @@ namespace lab8GE
                 current_block_pointer = NULL;
                 return original;
             }
-            
+
             // Move to the next data block
             if (cursor == current_boundary)
             {
-                // STUDENT WORK...
-                // move current block pointer to next
                 current_block_pointer = (current_block_pointer + 1);
-                // move cursor to where that block pointer is poining
-                cursor = *(current_block_pointer);
-                // adjust current boundary
-                current_boundary = *(current_block_pointer + lab8GE::deque.BLOCK_SIZE);
+                cursor = *current_block_pointer;
+                current_boundary = *(current_block_pointer + BLOCK_SIZE);
                 return *this;
-
-
             }
             // Move forward
             else
             {
-                // STUDENT WORK...
-                cursor = (cursor + 1);
-                return *this
+                cursor++;
+                return original;
             }
-            
-            return original;
         }
-        
-        
+
     private:
         // A pointer to the dynamic array of block pointers
         value_type** block_pointers;
-        
+
         // A pointer to the final entry in the array of block pointers
-        value_type**  block_pointers_end;
-        
-        
-        // A pointer to the first block pointer that’s now being used
-        value_type**  first_bp;
-        
-        // A pointer to the last block pointer that’s now being used
-        value_type**  last_bp;
-        
+        value_type** block_pointers_end;
+
+        // A pointer to the first block pointer that's now being used
+        value_type** first_bp;
+
+        // A pointer to the last block pointer that's now being used
+        value_type** last_bp;
+
         value_type* front_ptr; // A pointer to the front element of the whole deque
-        
         value_type* back_ptr;  // A pointer to the back element of the whole deque
-        
+
         size_type bp_array_size; // Number of entries in the array of block pointers
-        size_type block_size; // Number of entries in each block of items
-        
-        
+        size_type block_size;    // Number of entries in each block of items
+
         // NOTE: Up to this point, the set of pointer variables
         //       is similar to the deque class, the following pointers
-        //       enable the itertor to move forward and point to the next item.
-        
-        value_type* cursor; // A pointer to the "current" item
-        value_type** current_block_pointer; // A pointer to the data block which includes the item the "cursor" is pointing to
-        value_type* current_boundary; // A pointer to the end of the data block the "cursor" is pointing to
+        //       enable the iterator to move forward and point to the next item.
+
+        value_type* cursor;                   // A pointer to the "current" item
+        value_type** current_block_pointer;   // A pointer to the data block which includes the item the "cursor" is pointing to
+        value_type* current_boundary;        // A pointer to the end of the data block the "cursor" is pointing to
     };
 }
 
